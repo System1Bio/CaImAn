@@ -882,11 +882,11 @@ class CNMF(object):
         for key in kwargs_new:
             if hasattr(self, key):
                 setattr(self, key, kwargs_new[key])
-        self.estimates.A, self.estimates.b, self.estimates.C, self.estimates.f =\
+        self.estimates.A, self.estimates.b, self.estimates.C, self.estimates.f, removed_components =\
             update_spatial_components(Y, C=self.estimates.C, f=self.estimates.f, A_in=self.estimates.A,
                                       b_in=self.estimates.b, dview=self.dview,
                                       sn=self.estimates.sn, dims=self.dims, **self.params.get_group('spatial'))
-
+        self.estimates.removed_components.append(removed_components)
         return self
 
     def merge_comps(self, Y, mx=50, fast_merge=True):

@@ -117,6 +117,8 @@ class Estimates(object):
         self.merged_ROIs = None
         self.coordinates = None
         self.F_dff = None
+        
+        self.removed_components = []
 
         self.idx_components = None
         self.idx_components_bad = None

@@ -296,7 +296,7 @@ def update_spatial_components(Y, C=None, f=None, A_in=None, sn=None, dims=None,
     except:
         raise Exception("Failed to delete: " + folder)
 
-    return A_, b, C, f
+    return A_, b, C, f, ff
 
 
 #%%
