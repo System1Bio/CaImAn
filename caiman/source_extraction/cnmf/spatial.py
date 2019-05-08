@@ -180,6 +180,14 @@ def update_spatial_components(Y, C=None, f=None, A_in=None, sn=None, dims=None,
     Y, A_in, C, f, n_pixels_per_process, rank_f, d, T = test(
         Y, A_in, C, f, n_pixels_per_process, nb)
 
+    # remove components that have a nan
+    ff = np.where(np.isnan(np.sum(C, axis=1)))  # remove empty components
+    if np.size(ff) > 0:  # Eliminating empty temporal components
+        logging.info("Eliminating nan components: {}".format(ff))
+        ff = ff[0]
+        A_in = csc_column_remove(A_in, list(ff))
+        C = np.delete(C, list(ff), 0)
+
     start_time = time.time()
     logging.info('Computing support of spatial components')
     # we compute the indicator from distance indicator
@@ -386,7 +394,7 @@ def regression_ipyparallel(pars):
         else:
             cct_ = []
 
-        if np.size(c) > 0:
+        if np.size(c) > 0 and noise_sn[px] > 0:
             sn = noise_sn[px] ** 2 * T
             if method_least_square == 'lasso_lars_old':
                 raise Exception("Obsolete parameter") # Old code, support was removed
