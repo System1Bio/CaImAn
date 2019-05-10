@@ -217,6 +217,7 @@ def update_temporal_components(Y, A, b, Cin, fin, bl=None, c1=None, g=None, sn=N
     if np.size(ff) > 0:  # Eliminating empty temporal components
         logging.info("Eliminating empty components: {}".format(ff))
         ff = ff[0]
+        logging.info('removing {0} empty spatial component(s)'.format(len(ff)))
         keep = list(range(A.shape[1]))
         for i in ff:
             keep.remove(i)

@@ -34,6 +34,7 @@ from skimage.transform import resize as resize_sk
 from sklearn.decomposition import NMF, FastICA
 from sklearn.utils.extmath import randomized_svd, squared_norm
 import sys
+from typing import List
 
 import caiman
 from .deconvolution import constrained_foopsi
@@ -645,9 +646,9 @@ def greedyROI(Y, nr=30, gSig=[5, 5], gSiz=[11, 11], nIter=5, kernel=None, nb=1,
                               for s in ijSig], indexing='xy')
         arr = np.array([np.reshape(s, (1, np.size(s)), order='F').squeeze()
                         for s in xySig], dtype=np.int)
-        indeces = np.ravel_multi_index(arr, d[0:-1], order='F')
+        indices = np.ravel_multi_index(arr, d[0:-1], order='F')
 
-        A[indeces, k] = np.reshape(
+        A[indices, k] = np.reshape(
             coef, (1, np.size(coef)), order='C').squeeze()
         Y[tuple([slice(*a) for a in ijSig])] -= dataSig.copy()
         if k < nr - 1:
@@ -1527,7 +1528,8 @@ def extract_ac(data_filtered, data_raw, ind_ctr, patch_dims):
     XX = np.dot(X.T, X)
     Xy = np.dot(X.T, data_raw)
     try:
-        ai = np.linalg.inv(XX).dot(Xy)[0]
+        #ai = np.linalg.inv(XX).dot(Xy)[0]
+        ai = np.linalg.solve(XX, Xy)[0]
     except:
         ai = scipy.linalg.lstsq(XX, Xy)[0][0]
     ai = ai.reshape(patch_dims)
