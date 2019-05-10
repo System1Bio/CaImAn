@@ -965,7 +965,7 @@ def greedyROI_corr(Y, Y_ds, max_number=None, gSiz=None, gSig=None, center_psf=Tr
         B += Y_ds.reshape((-1, total_frames), order='F')  # "Y-B"
 
         logging.info('Updating spatial components')
-        A, _, C, _ = caiman.source_extraction.cnmf.spatial.update_spatial_components(
+        A, _, C, _, _ = caiman.source_extraction.cnmf.spatial.update_spatial_components(
             B, C=C, f=np.zeros((0, total_frames), np.float32), A_in=A,
             sn=np.sqrt(downscale((sn**2).reshape(dims, order='F'),
                                  tuple([ssub] * len(dims))).ravel() / tsub) / ssub,
@@ -1003,7 +1003,7 @@ def greedyROI_corr(Y, Y_ds, max_number=None, gSiz=None, gSig=None, center_psf=Tr
         A = A.astype(np.float32)
         C = C.astype(np.float32)
         logging.info('Updating spatial components')
-        A, _, C, _ = caiman.source_extraction.cnmf.spatial.update_spatial_components(
+        A, _, C, _, _ = caiman.source_extraction.cnmf.spatial.update_spatial_components(
             B, C=C, f=np.zeros((0, total_frames), np.float32), A_in=A,
             sn=np.sqrt(downscale((sn**2).reshape(dims, order='F'),
                                  tuple([ssub] * len(dims))).ravel() / tsub) / ssub,
@@ -1053,7 +1053,7 @@ def greedyROI_corr(Y, Y_ds, max_number=None, gSiz=None, gSig=None, center_psf=Tr
         C = C.astype(np.float32)
         logging.info('Updating spatial components')
         options['spatial_params']['se'] = np.ones((1,) * len((d1, d2)), dtype=np.uint8)
-        A, _, C, _ = caiman.source_extraction.cnmf.spatial.update_spatial_components(
+        A, _, C, _, _ = caiman.source_extraction.cnmf.spatial.update_spatial_components(
             B, C=C, f=np.zeros((0, T), np.float32), A_in=A, sn=sn,
             b_in=np.zeros((np.prod(dims), 0), np.float32),
             dview=None, dims=dims, **options['spatial_params'])

@@ -175,7 +175,7 @@ class CNMF(object):
                 self.Ain, self.Cin, self.b_in, self.f_in, center = initialize_components(
                     Y, **options['init_params'])
 
-            A, b, Cin, self.f_in = update_spatial_components(Yr, self.Cin, self.f_in, self.Ain, sn=sn,
+            A, b, Cin, self.f_in, _ = update_spatial_components(Yr, self.Cin, self.f_in, self.Ain, sn=sn,
                                                              dview=self.dview, **options['spatial_params'])
 
             # set this to zero for fast updating without deconvolution
@@ -191,7 +191,7 @@ class CNMF(object):
 
             print((A.shape))
 
-            A, b, C, f = update_spatial_components(
+            A, b, C, f, _ = update_spatial_components(
                 Yr, C, f, A, sn=sn, dview=self.dview, dims=self.dims,  **options['spatial_params'])
             # set it back to original value to perform full deconvolution
             options['temporal_params']['p'] = self.p
