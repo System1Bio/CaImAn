@@ -777,7 +777,15 @@ class Estimates(object):
         self.idx_components = np.where(self.cnn_preds >= min_cnn_thr)[0]
         return self
 
-    def evaluate_components(self, imgs, params, dview=None):
+    def set_idx_components(self, predictions, params):
+        """Allows setting of evaluated componenets in cnm object using outside component quality estimators
+        
+        TODO: Wow this is super wordy...
+        """
+        self.idx_components = predictions
+        return self
+
+    def evaluate_components(self, imgs, params, predictions=None, dview=None):
         """Computes the quality metrics for each component and stores the
         indeces of the components that pass user specified thresholds. The
         various thresholds and parameters can be passed as inputs. If left

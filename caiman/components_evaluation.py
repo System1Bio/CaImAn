@@ -440,7 +440,7 @@ def evaluate_components_placeholder(params):
 
 def estimate_components_quality_auto(Y, A, C, b, f, YrA, frate, decay_time, gSig, dims, dview=None, min_SNR=2, r_values_min=0.9,
                                      r_values_lowest=-1, Npeaks=10, use_cnn=True, thresh_cnn_min=0.95, thresh_cnn_lowest=0.1,
-                                     thresh_fitness_delta=-20., min_SNR_reject=0.5, gSig_range = None):
+                                     thresh_fitness_delta=-20., min_SNR_reject=0.5, gSig_range = None, predictions=None):
     ''' estimates the quality of component automatically
 
     Args:
@@ -525,7 +525,7 @@ def estimate_components_quality_auto(Y, A, C, b, f, YrA, frate, decay_time, gSig
     idx_components, idx_components_bad, cnn_values = select_components_from_metrics(
                 A, dims, gSig, r_values,  comp_SNR, r_values_min,
                 r_values_lowest, min_SNR, min_SNR_reject,
-                thresh_cnn_min, thresh_cnn_lowest, use_cnn, gSig_range)
+                thresh_cnn_min, thresh_cnn_lowest, use_cnn, gSig_range, predictions=predictions)
 
     return idx_components, idx_components_bad, comp_SNR, r_values, cnn_values
 
@@ -556,11 +556,13 @@ def select_components_from_metrics(A, dims, gSig, r_values, comp_SNR,
             if predictions is None:
                 predictions, _ = evaluate_components_CNN(A, dims, gSig)
                 predictions = predictions[:, neuron_class]
+                # no need for else since we have predictions
         else:
             predictions = np.zeros(len(r_values))
             for size_range in gSig_range:
-                predictions = np.maximum(predictions,
-                                         evaluate_components_CNN(A, dims, size_range)[0][:, neuron_class])
+                # TODO: what if you only want to use your predictions?
+                if use_cnn:
+                    predictions = np.maximum(predictions, evaluate_components_CNN(A, dims, size_range)[0][:, neuron_class])
 
         idx_components_cnn = np.where(
             predictions >= thresh_cnn_min)[0]
